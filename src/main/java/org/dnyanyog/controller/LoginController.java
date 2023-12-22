@@ -2,26 +2,23 @@ package org.dnyanyog.controller;
 
 import org.dnyanyog.dto.LoginRequest;
 import org.dnyanyog.dto.LoginResponse;
+import org.dnyanyog.services.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LoginController {
-	@PostMapping(path = "/auth/validate")
+
+	@Autowired
+	LoginService loginService;
+
+	@PostMapping(path = "/auth/validate", consumes = { "application/json", "application/xml" }, produces = {
+			"application/json", "application/xml" })
 	public LoginResponse validate(@RequestBody LoginRequest loginRequest) {
 
-		LoginResponse response = new LoginResponse();
-
-		if (loginRequest.getUsername().equalsIgnoreCase("admin")
-				&& loginRequest.getPassword().equalsIgnoreCase("admin123")) {
-			response.setStatus("Success");
-			response.setMessage("Login Successful");
-		} else {
-			response.setStatus("Fail");
-			response.setMessage("Login Failed!");
-		}
-		return response;
+		return loginService.validate(loginRequest);
 	}
 
 }
